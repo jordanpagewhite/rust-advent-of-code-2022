@@ -38,4 +38,100 @@ In case the Elves get hungry and need extra snacks, they need to know which Elf 
 Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
 */
 pub fn solve() {
+    let input = include_str!("../input/day1/part1.txt");
+    get_most_calories_carried(input);
+}
+
+pub fn get_most_calories_carried(input: &str) -> u32 {
+    let mut max:u32 = 0;
+    let mut cur:u32 = 0;
+
+    for line in input.lines() {
+        if !line.is_empty() {
+            cur += line.parse::<u32>().unwrap();
+        } else  {
+            if cur > max {
+                max = cur;
+            }
+
+            cur = 0;
+        }
+    }
+
+    max
+}
+
+pub fn get_three_most_calories_carried(input: &str) -> u32 {
+    let mut max = Vec::new();
+    let mut cur: u32 = 0;
+
+    for line in input.lines() {
+        if !line.is_empty() {
+            cur += line.parse::<u32>().unwrap();
+        } else  {
+            max.push(cur);
+            cur = 0;
+        }
+    }
+
+    max.push(cur);
+    max.sort();
+    max.pop().unwrap() + max.pop().unwrap() + max.pop().unwrap()
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1_sample_data() {
+        let input = "1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000";
+        assert_eq!(get_most_calories_carried(input), 24000);
+    }
+
+    #[test]
+    fn test_part1() {
+        let input = include_str!("../input/day1/part1.txt");
+        assert_eq!(get_most_calories_carried(input), 68802);
+    }
+
+    #[test]
+    fn test_part2_sample_data() {
+        let input = "1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000";
+        assert_eq!(get_three_most_calories_carried(input), 45000);
+    }
+
+    #[test]
+    fn test_part2() {
+        let input = include_str!("../input/day1/part1.txt");
+        assert_eq!(get_three_most_calories_carried(input), 205370);
+    }
+
 }
